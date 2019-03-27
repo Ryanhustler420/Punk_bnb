@@ -1,4 +1,5 @@
 # Punk_bnb
+
 Clone (native app for mobile) of airbnb app build with ionic with angular js framework.
 
 ## Installation
@@ -16,3 +17,7 @@ Clone (native app for mobile) of airbnb app build with ionic with angular js fra
 ## VS code Extensions for make your life easier
 
 > Angular Essentials
+
+## ionic with CDN
+
+> [Guide Here](https://ionicframework.com/docs/installation/cdn)
