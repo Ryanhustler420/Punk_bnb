@@ -1,5 +1,7 @@
 {
   "name": "pure_app",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }
