@@ -35,3 +35,32 @@ Clone (native app for mobile) of airbnb app build with ionic with angular js fra
 > ionic generate service recipes/recipes
 
 > ionic generate component recipes/recipe-item
+
+## Useful Links
+
+> [Capacitor](https://capacitor.ionicframework.com/) - Check docs for step's
+
+## Complie to Native Platform
+
+> Android Studio / Xcode [Download Setup] as build tool
+
+> ionic capacitor add android/ios [run this after finish Android Studio and Tools] in project directory
+
+    - ng build [if capacitor gives error] [do this before you turn your web app to mobile] **use native cmd for ng build or it might hang your IDE**
+
+> Change Capacitor.config.json
+
+```javaScript
+{
+    "appId": "com.pure.recipe.ionic", // this must be change
+    "appName": "pure_app",
+    "bundledWebRuntime": false,
+    "webDir": "www"
+}
+```
+
+> ionic capacitor copy android [will copy your www folder to android native app]
+
+> ionic capacitor run android [all in one which run all above cmd line by line]
+
+> ionic capacitor run android -l [all in one which run all above cmd line by line in the Live Mode]
