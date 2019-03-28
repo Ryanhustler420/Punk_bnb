@@ -33,3 +33,5 @@ Clone (native app for mobile) of airbnb app build with ionic with angular js fra
 > ionic generate page recipes/recipe-detail
 
 > ionic generate service recipes/recipes
+
+> ionic generate component recipes/recipe-item
