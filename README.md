@@ -21,3 +21,17 @@ Clone (native app for mobile) of airbnb app build with ionic with angular js fra
 ## ionic with CDN
 
 > [Guide Here](https://ionicframework.com/docs/installation/cdn)
+
+## Command's
+
+> ionic generate [gererate page or services or etc...]
+
+## Things in use
+
+> ionic gererate page recipes
+
+> ionic generate page recipes/recipe-detail
+
+> ionic generate service recipes/recipes
+
+> ionic generate component recipes/recipe-item
