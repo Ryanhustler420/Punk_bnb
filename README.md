@@ -64,3 +64,31 @@ Clone (native app for mobile) of airbnb app build with ionic with angular js fra
 > ionic capacitor run android [all in one which run all above cmd line by line]
 
 > ionic capacitor run android -l [all in one which run all above cmd line by line in the Live Mode]
+
+## App Require Pages
+
+> ionic generate page auth
+
+> ionic generate page places
+
+> ionic generate page places/discover
+
+> ionic generate page places/offers
+
+> ionic generate page places/offers/new-offer
+
+> ionic generate page places/offers/edit-offer
+
+> ionic generate page places/discover/place-detail
+
+> ionic generate page places/offers/offer-bookings
+
+> ionic generate page bookings
+
+> ionic generate service places/places
+
+> ionic generate service auth/auth
+
+> ionic generate guard auth/auth
+
+> ionic generate component bookings/create-booking-model
