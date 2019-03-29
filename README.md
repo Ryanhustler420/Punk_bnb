@@ -84,3 +84,5 @@ Clone (native app for mobile) of airbnb app build with ionic with angular js fra
 > ionic generate page places/offers/offer-bookings
 
 > ionic generate page bookings
+
+> ionic generate service places/places
