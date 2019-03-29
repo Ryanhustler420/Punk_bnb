@@ -88,3 +88,5 @@ Clone (native app for mobile) of airbnb app build with ionic with angular js fra
 > ionic generate service places/places
 
 > ionic generate service auth/auth
+
+> ionic generate guard auth/auth
