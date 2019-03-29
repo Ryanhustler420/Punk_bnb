@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {NavController} from '@ionic/angular';
+import {NavController, ModalController} from '@ionic/angular';
+import {CreateBookingModelComponent} from '../../../bookings/create-booking-model/create-booking-model.component';
 
 @Component({
   selector: 'app-place-detail',
@@ -8,13 +9,19 @@ import {NavController} from '@ionic/angular';
   styleUrls: ['./place-detail.page.scss'],
 })
 export class PlaceDetailPage implements OnInit {
-  constructor(private router: Router, private navCtrl: NavController) {}
+  constructor(
+    private router: Router,
+    private navCtrl: NavController,
+    private modalCtrl: ModalController
+  ) {}
 
   ngOnInit() {}
 
   onBookPlace() {
-    // this.router.navigate(['/places/tabs/discover']);
-    this.navCtrl.navigateBack('/places/tabs/discover');
-    // this.navCtrl.pop(); // might not work if this page is first in stack
+    this.modalCtrl
+      .create({
+        component: CreateBookingModelComponent,
+      })
+      .then(modelEl => modelEl.present());
   }
 }
