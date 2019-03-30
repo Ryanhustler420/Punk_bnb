@@ -92,3 +92,5 @@ Clone (native app for mobile) of airbnb app build with ionic with angular js fra
 > ionic generate guard auth/auth
 
 > ionic generate component bookings/create-booking-model
+
+> ionic generate component places/offers/offer-item

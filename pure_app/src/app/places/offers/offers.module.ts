@@ -1,17 +1,18 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {Routes, RouterModule} from '@angular/router';
 
-import { IonicModule } from '@ionic/angular';
+import {IonicModule} from '@ionic/angular';
 
-import { OffersPage } from './offers.page';
+import {OffersPage} from './offers.page';
+import {OfferItemComponent} from './offer-item/offer-item.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: OffersPage
-  }
+    component: OffersPage,
+  },
 ];
 
 @NgModule({
@@ -19,8 +20,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
   ],
-  declarations: [OffersPage]
+  declarations: [OffersPage, OfferItemComponent],
 })
 export class OffersPageModule {}
