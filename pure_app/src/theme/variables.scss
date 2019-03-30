@@ -78,7 +78,7 @@
   // --ion-padding: 14px;
   // Go to Docs Theming > Advance
   --ion-toolbar-background: var(--ion-color-primary, black);
-  --ion-toolbar-color: var(--ion-color-primary-contrast)
+  --ion-toolbar-color: var(--ion-color-primary-contrast);
 }
 
 // .ios {
@@ -87,4 +87,8 @@
 
 // .md {
 
+// }
+
+// ion-button {
+//   --box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.6);
 // }
