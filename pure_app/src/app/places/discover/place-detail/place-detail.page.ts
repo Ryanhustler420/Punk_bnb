@@ -71,6 +71,7 @@ export class PlaceDetailPage implements OnInit {
         component: CreateBookingModelComponent,
         componentProps: {
           selectedPlace: this.place,
+          selectedMode: mode,
         },
       })
       .then(modelEl => {
