@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {PlacesService} from '../places.service';
 import {Place} from '../place.model';
 import {MenuController} from '@ionic/angular';
-import { SegmentChangeEventDetail } from '@ionic/core';
+import {SegmentChangeEventDetail} from '@ionic/core';
 
 @Component({
   selector: 'app-discover',
@@ -19,8 +19,16 @@ export class DiscoverPage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.populateData();
+  }
+
+  populateData() {
     this.loadedPlaces = this.placesService.allPlaces;
     this.listedLoadedPlaces = this.loadedPlaces.slice(1);
+  }
+
+  ionViewWillEnter() {
+    this.populateData();
   }
 
   onFilterUpdate(e: CustomEvent<SegmentChangeEventDetail>) {
