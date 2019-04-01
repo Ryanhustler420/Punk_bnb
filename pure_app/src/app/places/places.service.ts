@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, of} from 'rxjs';
 import {take, map, tap, delay, filter, switchMap} from 'rxjs/operators';
 
 import {Place} from './place.model';
@@ -177,6 +177,13 @@ export class PlacesService {
     let updatePlaces: Place[];
     return this.allPlaces.pipe(
       take(1),
+      switchMap(places => {
+        if (!places || places.length <= 0) {
+          return this.fetchPlaces();
+        } else {
+          return of(places);
+        }
+      }),
       switchMap(places => {
         const updatedPlaceIndex = places.findIndex(pl => pl.id === id);
         updatePlaces = [...places];
