@@ -94,3 +94,13 @@ Clone (native app for mobile) of airbnb app build with ionic with angular js fra
 > ionic generate component bookings/create-booking-model
 
 > ionic generate component places/offers/offer-item
+
+## Firebase Setup
+
+> Create an app
+
+> Go to Database Tab
+
+> Start Real Time Database
+
+> Use that API Base URL for Http Request
