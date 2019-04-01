@@ -93,12 +93,38 @@ export class PlacesService {
   }
 
   getPlace(id: string) {
-    return this.allPlaces.pipe(
-      take(1),
-      map(places => {
-        return {...places.find(p => p.id === id)};
-      })
-    );
+    return this.http
+      .get<PlaceData>(
+        `https://ionicpunkbnb.firebaseio.com/offered-places/${id}.json`
+      )
+      .pipe(
+        map(placeData => {
+          return new Place(
+            id,
+            placeData.title,
+            placeData.description,
+            placeData.imageUrl,
+            placeData.price,
+            new Date(placeData.availableFrom),
+            new Date(placeData.availableTo),
+            placeData.userId
+          );
+        })
+      );
+
+    // availableFrom: "2019-04-01T22:25:56.756Z"
+    // availableTo: "2019-12-14T22:25:56.757Z"
+    // description: "New Delhi Best Street Food Market Till Now!"
+    // imageUrl: "https://lonelyplanetimages.imgix.net/mastheads/GettyImages-538096543_medium.jpg?sharp=10&vib=20&w=1200"
+    // price: 123.99
+    // title: "Chandni Chock"
+    // userId: "abc"
+    // this.allPlaces.pipe(
+    //   take(1),
+    //   map(places => {
+    //     return {...places.find(p => p.id === id)};
+    //   })
+    // );
   }
 
   addPlace(
