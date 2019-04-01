@@ -4,11 +4,13 @@ import {
   NavController,
   ModalController,
   ActionSheetController,
+  LoadingController,
 } from '@ionic/angular';
 import {CreateBookingModelComponent} from '../../../bookings/create-booking-model/create-booking-model.component';
 import {Place} from './../../place.model';
 import {PlacesService} from './../../places.service';
 import {Subscription} from 'rxjs';
+import {BookingService} from './../../../bookings/booking.service';
 
 @Component({
   selector: 'app-place-detail',
@@ -24,7 +26,9 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
     private navCtrl: NavController,
     private modalCtrl: ModalController,
     private placesService: PlacesService,
-    private actionSheetCtrl: ActionSheetController
+    private actionSheetCtrl: ActionSheetController,
+    private bookingService: BookingService,
+    private loadingCtrl: LoadingController
   ) {}
 
   ngOnInit() {
@@ -91,10 +95,30 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
         return modelEl.onDidDismiss();
       })
       .then(resultData => {
-        console.log(resultData.data, resultData.role);
-        if (resultData.role === 'confirm') {
-          console.log('BOOKED!');
-        }
+        this.loadingCtrl
+          .create({
+            message: 'Booking place...',
+          })
+          .then(loadingEL => {
+            loadingEL.present();
+            const data = resultData.data.bookingData;
+            if (resultData.role === 'confirm') {
+              return this.bookingService
+                .addBooking(
+                  this.place.id,
+                  this.place.title,
+                  this.place.imageUrl,
+                  data.firstName,
+                  data.lastName,
+                  data.guestNumber,
+                  data.startDate,
+                  data.endDate
+                )
+                .subscribe(() => {
+                  loadingEL.dismiss();
+                });
+            }
+          });
       });
   }
 }
