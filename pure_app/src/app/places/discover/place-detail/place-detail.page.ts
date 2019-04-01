@@ -1,28 +1,37 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
   NavController,
   ModalController,
   ActionSheetController,
+  LoadingController,
 } from '@ionic/angular';
 import {CreateBookingModelComponent} from '../../../bookings/create-booking-model/create-booking-model.component';
 import {Place} from './../../place.model';
 import {PlacesService} from './../../places.service';
+import {Subscription} from 'rxjs';
+import {BookingService} from './../../../bookings/booking.service';
+import { AuthService } from './../../../auth/auth.service';
 
 @Component({
   selector: 'app-place-detail',
   templateUrl: './place-detail.page.html',
   styleUrls: ['./place-detail.page.scss'],
 })
-export class PlaceDetailPage implements OnInit {
+export class PlaceDetailPage implements OnInit, OnDestroy {
   place: Place;
+  private placeSub: Subscription;
+  isBookable = false;
 
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private modalCtrl: ModalController,
     private placesService: PlacesService,
-    private actionSheetCtrl: ActionSheetController
+    private actionSheetCtrl: ActionSheetController,
+    private bookingService: BookingService,
+    private loadingCtrl: LoadingController,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -31,8 +40,19 @@ export class PlaceDetailPage implements OnInit {
         this.navCtrl.navigateBack('places/tabs/offers');
         return;
       }
-      this.place = this.placesService.getPlace(paramMap.get('placeId'));
+      this.placeSub = this.placesService
+        .getPlace(paramMap.get('placeId'))
+        .subscribe(place => {
+          this.place = place;
+          this.isBookable = place.userId !== this.authService.userId;
+        });
     });
+  }
+
+  ngOnDestroy() {
+    if (this.placeSub) {
+      this.placeSub.unsubscribe();
+    }
   }
 
   onBookPlace() {
@@ -79,10 +99,30 @@ export class PlaceDetailPage implements OnInit {
         return modelEl.onDidDismiss();
       })
       .then(resultData => {
-        console.log(resultData.data, resultData.role);
-        if (resultData.role === 'confirm') {
-          console.log('BOOKED!');
-        }
+        this.loadingCtrl
+          .create({
+            message: 'Booking place...',
+          })
+          .then(loadingEL => {
+            loadingEL.present();
+            const data = resultData.data.bookingData;
+            if (resultData.role === 'confirm') {
+              return this.bookingService
+                .addBooking(
+                  this.place.id,
+                  this.place.title,
+                  this.place.imageUrl,
+                  data.firstName,
+                  data.lastName,
+                  data.guestNumber,
+                  data.startDate,
+                  data.endDate
+                )
+                .subscribe(() => {
+                  loadingEL.dismiss();
+                });
+            }
+          });
       });
   }
 }
