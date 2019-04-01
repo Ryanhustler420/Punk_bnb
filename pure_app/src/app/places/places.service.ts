@@ -148,12 +148,12 @@ export class PlacesService {
   }
 
   editPlace(id: string, title: string, description: string) {
+    let updatePlaces: Place[];
     return this.allPlaces.pipe(
       take(1),
-      delay(1000),
-      tap(places => {
+      switchMap(places => {
         const updatedPlaceIndex = places.findIndex(pl => pl.id === id);
-        const updatePlaces = [...places];
+        updatePlaces = [...places];
         const oldPlace = updatePlaces[updatedPlaceIndex];
         updatePlaces[updatedPlaceIndex] = new Place(
           oldPlace.id,
@@ -165,6 +165,15 @@ export class PlacesService {
           oldPlace.availableTo,
           oldPlace.userId
         );
+        return this.http.put(
+          `https://ionicpunkbnb.firebaseio.com/offered-places/${id}.json`,
+          {
+            ...updatePlaces[updatedPlaceIndex],
+            id: null,
+          }
+        );
+      }),
+      tap(() => {
         this._places.next(updatePlaces);
       })
     );
