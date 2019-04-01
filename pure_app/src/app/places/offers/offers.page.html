@@ -17,7 +17,20 @@
   <ion-grid class="ion-no-padding">
     <ion-row>
       <ion-col size="12" size-sm="8" offset-sm="2" class="ion-no-padding">
-        <ion-list>
+        <div padding *ngIf="isLoading" text-center>
+          <ion-spinner color="primary"></ion-spinner>
+        </div>
+        <div
+          color="primary"
+          *ngIf="!isLoading && offers.length <= 0"
+          text-center
+        >
+          <p>No offers found! Please create one first!</p>
+          <ion-button [routerLink]="['/places/tabs/offers/new']" color="primary"
+            >Offer New Place</ion-button
+          >
+        </div>
+        <ion-list *ngIf="!isLoading && offers.length > 0">
           <ion-item-sliding *ngFor="let offer of offers" #slidingItem>
             <app-offer-item [offer]="offer"></app-offer-item>
             <ion-item-options>
