@@ -4,6 +4,7 @@ import {take, map, tap, delay, filter} from 'rxjs/operators';
 
 import {Place} from './place.model';
 import {AuthService} from './../auth/auth.service';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -42,7 +43,7 @@ export class PlacesService {
     ),
   ]);
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private http: HttpClient) {}
 
   get allPlaces() {
     return this._places.asObservable();
@@ -74,14 +75,23 @@ export class PlacesService {
       dateTo,
       this.authService.userId
     );
-
-    return this.allPlaces.pipe(
-      take(1),
-      delay(1000),
-      tap(places => {
-        this._places.next(places.concat(newPlace));
+    return this.http
+      .post('https://ionicpunkbnb.firebaseio.com/offered-places.json', {
+        ...newPlace,
+        id: null,
       })
-    );
+      .pipe(
+        tap(resData => {
+          console.log(resData);
+        })
+      );
+    // return this.allPlaces.pipe(
+    //   take(1),
+    //   delay(1000),
+    //   tap(places => {
+    //     this._places.next(places.concat(newPlace));
+    //   })
+    // );
   }
 
   editPlace(id: string, title: string, description: string) {
