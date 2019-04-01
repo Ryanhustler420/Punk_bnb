@@ -19,17 +19,17 @@ export class DiscoverPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.populateData();
-  }
-
-  populateData() {
+    // this.populateData();
     this.loadedPlaces = this.placesService.allPlaces;
     this.listedLoadedPlaces = this.loadedPlaces.slice(1);
   }
 
-  ionViewWillEnter() {
-    this.populateData();
-  }
+  // populateData() {
+  // }
+
+  // ionViewWillEnter() {
+  //   this.populateData();
+  // }
 
   onFilterUpdate(e: CustomEvent<SegmentChangeEventDetail>) {
     console.log(e.detail);
