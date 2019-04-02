@@ -18,8 +18,9 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col size-sm="6" offset-sm="3" text-center padding>
-        <p>{{ place.description }}</p>
+      <ion-col size-sm="6" offset-sm="3" text-center>
+        <h3>{{ place.description }}</h3>
+        <h4>${{ place.price }} /day</h4>
       </ion-col>
     </ion-row>
     <ion-row *ngIf="isBookable">
@@ -27,6 +28,11 @@
         <ion-button color="primary" margin (click)="onBookPlace()"
           >Book
         </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3">
+        <app-map-box lat="40.7609177" lng="-73.9896704"></app-map-box>
       </ion-col>
     </ion-row>
   </ion-grid>

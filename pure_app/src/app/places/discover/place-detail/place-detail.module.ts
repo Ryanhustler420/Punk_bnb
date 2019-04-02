@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { PlaceDetailPage } from './place-detail.page';
 import { CreateBookingModelComponent } from '../../../bookings/create-booking-model/create-booking-model.component';
+import { MapBoxComponent } from './../../../map/map-box/map-box.component';
 
 const routes: Routes = [
   {
@@ -22,7 +23,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [PlaceDetailPage, CreateBookingModelComponent],
+  declarations: [PlaceDetailPage, CreateBookingModelComponent, MapBoxComponent],
   entryComponents: [CreateBookingModelComponent],
 })
 export class PlaceDetailPageModule {}
