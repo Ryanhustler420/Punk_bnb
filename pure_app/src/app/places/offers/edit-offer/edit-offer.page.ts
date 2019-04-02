@@ -2,7 +2,11 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Place} from './../../place.model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PlacesService} from './../../places.service';
-import {NavController, LoadingController} from '@ionic/angular';
+import {
+  NavController,
+  LoadingController,
+  AlertController,
+} from '@ionic/angular';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
 
@@ -15,29 +19,55 @@ export class EditOfferPage implements OnInit, OnDestroy {
   form: FormGroup;
   place: Place;
   private placeSub: Subscription;
+  isLoading = false;
+  placeId: string;
 
   constructor(
     private route: ActivatedRoute,
     private placeService: PlacesService,
     private navCtrl: NavController,
     private router: Router,
-    private lodingCtrl: LoadingController
+    private lodingCtrl: LoadingController,
+    private alertCtrl: AlertController
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe(paramMap => {
-      if (!paramMap.has('placeId')) {
-        this.navCtrl.navigateBack('/places/tabs/offers');
-        return;
+    this.route.paramMap.subscribe(
+      paramMap => {
+        if (!paramMap.has('placeId')) {
+          this.navCtrl.navigateBack('/places/tabs/offers');
+          return;
+        }
+        this.placeId = paramMap.get('placeId');
+        this.isLoading = true;
+        this.placeSub = this.placeService
+          .getPlace(paramMap.get('placeId'))
+          .subscribe(place => {
+            this.place = place;
+            // init form
+            this.initForm();
+            this.isLoading = false;
+          });
+      },
+      error => {
+        this.alertCtrl
+          .create({
+            header: 'An error occurred!',
+            message: 'Place could not be fetch. Please try again later.',
+            buttons: [
+              {
+                text: 'Okey',
+                handler: () => {
+                  this.router.navigate(['places/tabs/offers']);
+                },
+              },
+            ],
+          })
+          .then(alertEl => {
+            alertEl.present();
+          });
       }
-      this.placeSub = this.placeService
-        .getPlace(paramMap.get('placeId'))
-        .subscribe(place => {
-          this.place = place;
-          // init form
-          this.initForm();
-        });
-    });
+    );
   }
 
   ngOnDestroy() {
