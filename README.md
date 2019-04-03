@@ -95,6 +95,14 @@ Clone (native app for mobile) of airbnb app build with ionic with angular js fra
 
 > ionic generate component places/offers/offer-item
 
+> ionic generate component map/map-box
+
+> ionic gererate service map/map
+
+> ionic generate component shared/pickers/location-picker
+
+> ionic generate component shared/map-modal
+
 ## Firebase Setup
 
 > Create an app
