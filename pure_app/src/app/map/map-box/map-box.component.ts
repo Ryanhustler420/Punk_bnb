@@ -13,10 +13,12 @@ export class MapBoxComponent implements OnInit {
   style = 'mapbox://styles/mapbox/streets-v10?optimize=true';
   @Input() lat;
   @Input() lng;
+  @Input() height;
 
   constructor(private mapService: MapService) {}
 
   ngOnInit() {
+    document.getElementById(`map`).style.height = this.height + '%';
     this.buildMap();
   }
 
@@ -33,7 +35,9 @@ export class MapBoxComponent implements OnInit {
   // add markers to map
   addMarker() {
     new mapboxgl.Marker({
-      color: 'red'
-    }).setLngLat([this.lng, this.lat]).addTo(this.map);
+      color: 'red',
+    })
+      .setLngLat([this.lng, this.lat])
+      .addTo(this.map);
   }
 }

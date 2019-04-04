@@ -8,5 +8,15 @@
 </ion-header>
 
 <ion-content>
-  <app-map-box lat="40.7609177" lng="-73.9896704"></app-map-box>
+  <app-map-box height="100" [lat]="lat" [lng]="lng"></app-map-box>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-input padding id="input-field" placeholder="Enter Location"></ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-button id="btn">Done</ion-button>
+    </ion-row>
+  </ion-grid>
 </ion-content>

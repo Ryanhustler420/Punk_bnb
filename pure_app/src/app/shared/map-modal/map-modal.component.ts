@@ -7,6 +7,9 @@ import {ModalController} from '@ionic/angular';
   styleUrls: ['./map-modal.component.scss'],
 })
 export class MapModalComponent implements OnInit {
+  lat = '40.7609177';
+  lng = '-73.9896704';
+
   constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {}
