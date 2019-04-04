@@ -9,7 +9,7 @@ import { MapBoxComponent } from '../map/map-box/map-box.component';
 @NgModule({
   declarations: [LocationPickerComponent, MapModalComponent, MapBoxComponent],
   imports: [CommonModule, IonicModule],
-  exports: [LocationPickerComponent, MapModalComponent],
+  exports: [LocationPickerComponent, MapModalComponent, MapBoxComponent],
   entryComponents: [MapModalComponent],
 })
 export class SharedModule {}
