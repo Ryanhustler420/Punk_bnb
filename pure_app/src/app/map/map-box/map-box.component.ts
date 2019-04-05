@@ -21,6 +21,9 @@ export class MapBoxComponent implements OnInit {
     document.getElementById(`map`).style.height = this.height + '%';
     this.mapService.changeMaker.subscribe(data => {
       if (data.length > 0) {
+        if (this.map) {
+          this.map.remove();
+        }
         this.lat = data[0];
         this.lng = data[1];
       }
@@ -40,10 +43,17 @@ export class MapBoxComponent implements OnInit {
 
   // add markers to map
   addMarker() {
-    new mapboxgl.Marker({
+    const marker = new mapboxgl.Marker({
       color: 'red',
+      draggable: true,
     })
       .setLngLat([this.lng, this.lat])
       .addTo(this.map);
+
+    marker.on('dragend', () => {
+      this.lat = marker.getLngLat()['lat'];
+      this.lng = marker.getLngLat()['lng'];
+      this.mapService.moveMarker(this.lat, this.lng);
+    });
   }
 }

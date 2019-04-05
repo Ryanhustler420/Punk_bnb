@@ -44,6 +44,7 @@ export class MapModalComponent implements OnInit {
 
   onCancel() {
     this.modalCtrl.dismiss();
+    console.log(this.lat, this.lng);
   }
 
   run() {
