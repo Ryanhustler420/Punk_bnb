@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {ModalController, LoadingController} from '@ionic/angular';
 import {HttpClient} from '@angular/common/http';
 
@@ -55,6 +55,7 @@ export class MapModalComponent implements OnInit {
         this.lat = data[0]['center'][1];
         this.lng = data[0]['center'][0];
         this.addressError = false;
+        this.mapService.moveMarker(this.lat, this.lng);
       } else {
         this.addressError = true;
       }

@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, EventEmitter} from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import {MapService} from '../map.service';
 
@@ -19,7 +19,13 @@ export class MapBoxComponent implements OnInit {
 
   ngOnInit() {
     document.getElementById(`map`).style.height = this.height + '%';
-    this.buildMap();
+    this.mapService.changeMaker.subscribe(data => {
+      if (data.length > 0) {
+        this.lat = data[0];
+        this.lng = data[1];
+      }
+      this.buildMap();
+    });
   }
 
   buildMap() {
