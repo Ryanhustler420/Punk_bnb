@@ -17,10 +17,16 @@ export class MapModalComponent implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private http: HttpClient,
+    // private http: HttpClient,
     private mapService: MapService,
     private loadingCtrl: LoadingController
   ) {}
+
+  // get address from lat lon
+  // get current location lat long or text
+  // send back lat long and address text
+  // show static map
+  // submit form
 
   ngOnInit() {
     this.loadingCtrl
@@ -48,18 +54,18 @@ export class MapModalComponent implements OnInit {
   }
 
   run() {
-    if (!this.input) {
-      return;
-    }
-    this.mapService.getLocation(this.input).subscribe(data => {
-      if (data.length > 0) {
-        this.lat = data[0]['center'][1];
-        this.lng = data[0]['center'][0];
-        this.addressError = false;
-        this.mapService.moveMarker(this.lat, this.lng);
-      } else {
-        this.addressError = true;
-      }
-    });
+    !this.input
+      ? // tslint:disable-next-line:no-unused-expression
+        null || 0
+      : this.mapService.getLocation(this.input).subscribe(data => {
+          this.addressError = false;
+          if (data.length > 0) {
+            (this.lat = data[0]['center'][1]),
+              (this.lng = data[0]['center'][0]);
+            this.mapService.moveMarker(this.lat, this.lng);
+          } else {
+            this.addressError = true;
+          }
+        });
   }
 }

@@ -11,6 +11,7 @@ export class MapBoxComponent implements OnInit {
   // default settings
   map: mapboxgl.Map;
   style = 'mapbox://styles/mapbox/streets-v10?optimize=true';
+  marker;
   @Input() lat;
   @Input() lng;
   @Input() height;
@@ -21,14 +22,15 @@ export class MapBoxComponent implements OnInit {
     document.getElementById(`map`).style.height = this.height + '%';
     this.mapService.changeMaker.subscribe(data => {
       if (data.length > 0) {
-        if (this.map) {
-          this.map.remove();
-        }
         this.lat = data[0];
         this.lng = data[1];
+        if (this.map) {
+          this.map.flyTo({center: [this.lng, this.lat]});
+          this.addMarker();
+        }
       }
-      this.buildMap();
     });
+    this.buildMap();
   }
 
   buildMap() {
@@ -41,18 +43,22 @@ export class MapBoxComponent implements OnInit {
     this.addMarker();
   }
 
-  // add markers to map
+  // add markers to map or remove previous if any
   addMarker() {
-    const marker = new mapboxgl.Marker({
+    // Remove previous marker
+    if (this.marker) {
+      this.marker.remove();
+    }
+    this.marker = new mapboxgl.Marker({
       color: 'red',
       draggable: true,
     })
       .setLngLat([this.lng, this.lat])
       .addTo(this.map);
 
-    marker.on('dragend', () => {
-      this.lat = marker.getLngLat()['lat'];
-      this.lng = marker.getLngLat()['lng'];
+    this.marker.on('dragend', () => {
+      this.lat = this.marker.getLngLat()['lat'];
+      this.lng = this.marker.getLngLat()['lng'];
       this.mapService.moveMarker(this.lat, this.lng);
     });
   }

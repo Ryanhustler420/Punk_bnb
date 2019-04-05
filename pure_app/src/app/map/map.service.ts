@@ -4,7 +4,7 @@ import {environment} from '../environment';
 import * as mapboxgl from 'mapbox-gl';
 import {HttpClient} from '@angular/common/http';
 import {switchMap, tap, take, map} from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +31,11 @@ export class MapService {
       );
   }
 
-  moveMarker(lat: number , lng: number) {
+  get markerList() {
+    return this.changeMaker.asObservable();
+  }
+
+  moveMarker(lat: number, lng: number) {
     this.changeMaker.next([lat, lng]);
   }
 }
