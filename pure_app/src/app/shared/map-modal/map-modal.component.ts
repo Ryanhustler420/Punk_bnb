@@ -35,18 +35,12 @@ export class MapModalComponent implements OnInit {
       })
       .then(loadingEl => {
         loadingEl.present();
-        this.mapService.getLocation('Jamshedpur Jharkhand').subscribe(data => {
-          if (data) {
-            this.lat = data[0]['center'][1];
-            this.lng = data[0]['center'][0];
-            this.addressError = false;
-            this.loadingCtrl.dismiss();
-          } else {
-            this.addressError = true;
-          }
+        this.mapService.getCurrentLocationLatLong().subscribe(pos => {
+          this.lat = pos.coords.latitude;
+          this.lng = pos.coords.longitude;
+          this.loadingCtrl.dismiss();
         });
       });
-    console.log(this.mapService.getCurrentLocationLatLong());
   }
 
   onCancel() {

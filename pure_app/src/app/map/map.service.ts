@@ -4,7 +4,7 @@ import {environment} from '../environment';
 import * as mapboxgl from 'mapbox-gl';
 import {HttpClient} from '@angular/common/http';
 import {switchMap, tap, take, map} from 'rxjs/operators';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,15 +16,15 @@ export class MapService {
     mapboxgl.accessToken = environment.mapbox.accessToken;
   }
 
-  getCurrentLocationLatLong() {
-    const coordinates = {};
-    if (navigator.geolocation) {
-      navigator.geolocation.watchPosition(pos => {
-        coordinates['lat'] = pos.coords.latitude;
-        coordinates['lng'] = pos.coords.longitude;
-      });
-    }
-    return coordinates;
+  getCurrentLocationLatLong(): Observable<any> {
+    return new Observable(observer => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+          observer.next(pos);
+          observer.complete();
+        });
+      }
+    });
   }
 
   getLocation(address: string) {
