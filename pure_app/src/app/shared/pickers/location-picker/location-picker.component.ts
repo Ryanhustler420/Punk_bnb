@@ -20,7 +20,10 @@ export class LocationPickerComponent implements OnInit {
       })
       .then(modalEl => {
         modalEl.present();
-      });
+        return modalEl.onDidDismiss();
+      })
+      .then(resultData => console.log(resultData));
     // console.log('modal open');
+    // recieve data [lat, lng]
   }
 }

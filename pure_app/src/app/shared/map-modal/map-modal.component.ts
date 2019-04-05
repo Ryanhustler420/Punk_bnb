@@ -1,6 +1,5 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ModalController, LoadingController} from '@ionic/angular';
-import {HttpClient} from '@angular/common/http';
 
 import {MapService} from './../../map/map.service';
 
@@ -40,16 +39,26 @@ export class MapModalComponent implements OnInit {
           this.lng = pos.coords.longitude;
           this.loadingCtrl.dismiss();
         });
-      });
+      })
+      .catch(err => console.log(err, 'map[modalError]'));
   }
 
   onCancel() {
-    this.modalCtrl.dismiss();
-    console.log(this.lat, this.lng);
+    this.modalCtrl.dismiss(
+      {lat: this.lat, lng: this.lng, address: this.input},
+      'Current'
+    );
+  }
+
+  onDone() {
+    this.modalCtrl.dismiss(
+      {lat: this.lat, lng: this.lng, address: this.input},
+      'Manual'
+    );
   }
 
   run() {
-    !this.input
+    !this.input.trim()
       ? // tslint:disable-next-line:no-unused-expression
         null || 0
       : this.mapService.getLocation(this.input).subscribe(data => {

@@ -19,7 +19,7 @@
       <ion-row>
         <ion-col>
           <ion-input
-            [color]="addressError ? 'danger': ''"
+            [color]="addressError ? 'danger' : ''"
             [(ngModel)]="input"
             [debounce]="1000"
             [clearInput]="true"
@@ -31,7 +31,7 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-button (click)="onCancel()" id="btn">Done</ion-button>
+        <ion-button (click)="onDone()" id="btn">Done</ion-button>
       </ion-row>
     </ion-grid>
   </div>
