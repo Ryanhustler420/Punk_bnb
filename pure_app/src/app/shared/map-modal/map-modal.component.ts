@@ -46,6 +46,7 @@ export class MapModalComponent implements OnInit {
           }
         });
       });
+    console.log(this.mapService.getCurrentLocationLatLong());
   }
 
   onCancel() {

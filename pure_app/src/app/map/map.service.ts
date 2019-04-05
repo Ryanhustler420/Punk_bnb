@@ -16,6 +16,17 @@ export class MapService {
     mapboxgl.accessToken = environment.mapbox.accessToken;
   }
 
+  getCurrentLocationLatLong() {
+    const coordinates = {};
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition(pos => {
+        coordinates['lat'] = pos.coords.latitude;
+        coordinates['lng'] = pos.coords.longitude;
+      });
+    }
+    return coordinates;
+  }
+
   getLocation(address: string) {
     return this.http
       .get(
