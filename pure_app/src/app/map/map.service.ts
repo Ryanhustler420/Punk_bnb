@@ -16,6 +16,20 @@ export class MapService {
     mapboxgl.accessToken = environment.mapbox.accessToken;
   }
 
+  getAddressTextFromLatLng(lat: number, lng: number) {
+    return this.http
+      .get(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${
+          mapboxgl.accessToken
+        }`
+      )
+      .pipe(
+        switchMap(resData => [resData['features']]),
+        map(data => (data.length > 0 ? data[0] : [])),
+        tap()
+      );
+  }
+
   getCurrentLocationLatLong(): Observable<any> {
     return new Observable(observer => {
       if (navigator.geolocation) {

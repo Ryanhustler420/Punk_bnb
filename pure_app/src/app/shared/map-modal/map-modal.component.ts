@@ -37,6 +37,11 @@ export class MapModalComponent implements OnInit {
         this.mapService.getCurrentLocationLatLong().subscribe(pos => {
           this.lat = pos.coords.latitude;
           this.lng = pos.coords.longitude;
+          this.mapService
+            .getAddressTextFromLatLng(this.lat, this.lng)
+            .subscribe(data => {
+              this.input = (data.place_name.split(',').join(''));
+            });
           this.loadingCtrl.dismiss();
         });
       })
