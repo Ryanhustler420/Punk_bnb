@@ -13,9 +13,6 @@ export class MapModalComponent implements OnInit {
   lng;
   input: string;
   addressError = false;
-  address;
-  default_lat;
-  default_lng;
 
   constructor(
     private modalCtrl: ModalController,
@@ -24,9 +21,6 @@ export class MapModalComponent implements OnInit {
     private loadingCtrl: LoadingController
   ) {}
 
-  // get address from lat lon
-  // get current location lat long or text
-  // send back lat long and address text
   // show static map
   // submit form
 
@@ -47,20 +41,12 @@ export class MapModalComponent implements OnInit {
               }
             });
           } else {
-            console.log('this else');
             this.mapService.getCurrentLocationLatLong().subscribe(pos => {
               if (this.lat) {
                 return;
               }
-              this.default_lat = pos.coords.latitude;
               this.lat = pos.coords.latitude;
-              this.default_lng = pos.coords.longitude;
               this.lng = pos.coords.longitude;
-              this.mapService
-                .getAddressTextFromLatLng(this.lat, this.lng)
-                .subscribe(address => {
-                  this.address = address.place_name.split(',').join('');
-                });
               this.loadingCtrl.dismiss();
             });
           }
@@ -70,21 +56,11 @@ export class MapModalComponent implements OnInit {
   }
 
   onCancel() {
-    this.modalCtrl.dismiss(
-      {
-        lat: this.default_lat,
-        lng: this.default_lng,
-        address: this.address || this.input,
-      },
-      'Current'
-    );
+    this.modalCtrl.dismiss({lat: this.lat, lng: this.lng}, 'Current');
   }
 
   onDone() {
-    this.modalCtrl.dismiss(
-      {lat: this.lat, lng: this.lng, address: this.address || this.input},
-      'Manual'
-    );
+    this.modalCtrl.dismiss({lat: this.lat, lng: this.lng}, 'Manual');
   }
 
   run() {
