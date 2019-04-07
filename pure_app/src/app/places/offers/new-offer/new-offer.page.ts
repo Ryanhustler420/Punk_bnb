@@ -89,7 +89,7 @@ export class NewOfferPage implements OnInit {
 
   setLocationLatLng(e: Location) {
     this.isSelectedLocation = true;
-    (this.lat = e['data'].lat), (this.lng = e['data'].lng);
+    (this.lat = e.lat), (this.lng = e.lng);
     this.form.patchValue({location: e});
   }
 }
