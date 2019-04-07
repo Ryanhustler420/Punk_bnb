@@ -75,6 +75,11 @@
           </ion-item>
         </ion-col>
       </ion-row>
+      <ion-row>
+        <ion-col size-sm="3" offset-sm="3">
+          <app-image-picker></app-image-picker>
+        </ion-col>
+      </ion-row>
       <ion-row *ngIf="!isSelectedLocation">
         <ion-col size-sm="3" offset-sm="3">
           <app-location-picker
@@ -83,7 +88,12 @@
         </ion-col>
       </ion-row>
       <ion-row *ngIf="isSelectedLocation">
-        <app-map-box [readOnly]="true" height="50" [lat]="lat" [lng]="lng"></app-map-box>
+        <app-map-box
+          [readOnly]="true"
+          height="50"
+          [lat]="lat"
+          [lng]="lng"
+        ></app-map-box>
       </ion-row>
     </ion-grid>
   </form>
