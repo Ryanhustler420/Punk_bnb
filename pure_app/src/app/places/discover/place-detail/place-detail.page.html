@@ -31,7 +31,12 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <app-map-box height="70" lat="40.7609177" lng="-73.9896704"></app-map-box>
+      <app-map-box
+        [readOnly]="true"
+        height="50"
+        [lat]="place.location['data'].lat"
+        [lng]="place.location['data'].lng"
+      ></app-map-box>
     </ion-row>
   </ion-grid>
 </ion-content>

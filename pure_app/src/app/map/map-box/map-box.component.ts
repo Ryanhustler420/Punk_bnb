@@ -15,6 +15,8 @@ export class MapBoxComponent implements OnInit {
   @Input() lat;
   @Input() lng;
   @Input() height;
+  @Input() readOnly = false;
+  @Input() removeAllMarker = false;
 
   constructor(private mapService: MapService) {}
 
@@ -39,8 +41,11 @@ export class MapBoxComponent implements OnInit {
       style: this.style,
       zoom: 15,
       center: [this.lng, this.lat],
+      interactive: this.readOnly,
     });
-    this.addMarker();
+    if (!this.removeAllMarker) {
+      this.addMarker();
+    }
   }
 
   // add markers to map or remove previous if any
@@ -51,7 +56,7 @@ export class MapBoxComponent implements OnInit {
     }
     this.marker = new mapboxgl.Marker({
       color: 'red',
-      draggable: true,
+      draggable: !this.readOnly,
     })
       .setLngLat([this.lng, this.lat])
       .addTo(this.map);
