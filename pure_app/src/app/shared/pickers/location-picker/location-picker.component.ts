@@ -36,7 +36,7 @@ export class LocationPickerComponent implements OnInit {
             },
           },
           {
-            text: 'Pick in Map',
+            text: 'Pick In Map',
             handler: () => {
               this.openMapDialog();
             },

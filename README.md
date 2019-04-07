@@ -107,6 +107,8 @@ Clone (native app for mobile) of airbnb app build with ionic with angular js fra
 
 > ionic generate component shared/map-modal
 
+> ionic generate component shared/pickers/image-picker
+
 ## Firebase Setup
 
 > Create an app
@@ -122,3 +124,10 @@ Clone (native app for mobile) of airbnb app build with ionic with angular js fra
 > mapbox.com
 
 > [check steps](https://angularfirebase.com/lessons/build-realtime-maps-in-angular-with-mapbox-gl/)
+
+## Keep In Mind
+
+> Check for App Permission withen respective native app folder/directory [check capacitor docs]
+
+- android
+  - Android.manifest.xml
