@@ -54,6 +54,10 @@ export class NewOfferPage implements OnInit {
     });
   }
 
+  onImagePicked(e: string) {
+    console.log(e);
+  }
+
   ionViewWillEnter() {
     this.isSelectedLocation = false;
   }
