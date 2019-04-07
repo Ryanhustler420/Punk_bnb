@@ -4,6 +4,9 @@ import {LoadingController} from '@ionic/angular';
 
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {PlacesService} from '../../places.service';
+import {Location} from './../../../shared/location.modal';
+import Map from 'mapbox-gl';
+import {MapService} from './../../../map/map.service';
 
 @Component({
   selector: 'app-new-offer',
@@ -12,11 +15,15 @@ import {PlacesService} from '../../places.service';
 })
 export class NewOfferPage implements OnInit {
   form: FormGroup;
+  lat = 0;
+  lng = 0;
+  isSelectedLocation = false;
 
   constructor(
     private placeService: PlacesService,
     private router: Router,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private mapService: MapService
   ) {}
 
   ngOnInit() {
@@ -41,7 +48,14 @@ export class NewOfferPage implements OnInit {
         updateOn: 'blur',
         validators: [Validators.required],
       }),
+      location: new FormControl(null, {
+        validators: [Validators.required],
+      }),
     });
+  }
+
+  ionViewWillEnter() {
+    this.isSelectedLocation = false;
   }
 
   onCreateOffer() {
@@ -61,13 +75,21 @@ export class NewOfferPage implements OnInit {
             this.form.value.description,
             +this.form.value.price,
             new Date(this.form.value.dateFrom),
-            new Date(this.form.value.dateTo)
+            new Date(this.form.value.dateTo),
+            this.form.value.location
           )
           .subscribe(() => {
             loadingEl.dismiss();
             this.form.reset();
+            this.mapService.resetLocationSubject();
             this.router.navigate(['/places/tabs/offers']);
           });
       });
+  }
+
+  setLocationLatLng(e: Location) {
+    this.isSelectedLocation = true;
+    (this.lat = e['data'].lat), (this.lng = e['data'].lng);
+    this.form.patchValue({location: e});
   }
 }

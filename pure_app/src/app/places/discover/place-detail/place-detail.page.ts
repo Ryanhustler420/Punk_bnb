@@ -13,6 +13,7 @@ import {PlacesService} from './../../places.service';
 import {Subscription} from 'rxjs';
 import {BookingService} from './../../../bookings/booking.service';
 import {AuthService} from './../../../auth/auth.service';
+import {MapService} from './../../../map/map.service';
 
 @Component({
   selector: 'app-place-detail',
@@ -24,6 +25,7 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
   private placeSub: Subscription;
   isBookable = false;
   isLoading = false;
+  address: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,7 +37,8 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
     private loadingCtrl: LoadingController,
     private authService: AuthService,
     private alertCtrl: AlertController,
-    private router: Router
+    private router: Router,
+    private mapService: MapService
   ) {}
 
   ngOnInit() {
@@ -50,6 +53,7 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
         .subscribe(
           place => {
             this.place = place;
+            this.getAddressText();
             this.isBookable = place.userId !== this.authService.userId;
             this.isLoading = false;
           },
@@ -149,6 +153,17 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
                 });
             }
           });
+      });
+  }
+
+  getAddressText() {
+    this.mapService
+      .getAddressTextFromLatLng(
+        this.place.location['data'].lat,
+        this.place.location['data'].lng
+      )
+      .subscribe(add => {
+        this.address = add.place_name.split(',').join();
       });
   }
 }
