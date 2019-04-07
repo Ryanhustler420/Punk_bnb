@@ -21,7 +21,7 @@ export class MapBoxComponent implements OnInit {
   ngOnInit() {
     document.getElementById(`map`).style.height = this.height + '%';
     this.mapService.changeMaker.subscribe(data => {
-      if (data.length > 0) {
+      if (data && data.length > 0) {
         this.lat = data[0];
         this.lng = data[1];
         if (this.map) {

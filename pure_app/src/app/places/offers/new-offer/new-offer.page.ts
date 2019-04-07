@@ -54,6 +54,10 @@ export class NewOfferPage implements OnInit {
     });
   }
 
+  ionViewWillEnter() {
+    this.isSelectedLocation = false;
+  }
+
   onCreateOffer() {
     if (!this.form.valid) {
       return;
@@ -77,6 +81,7 @@ export class NewOfferPage implements OnInit {
           .subscribe(() => {
             loadingEl.dismiss();
             this.form.reset();
+            this.mapService.resetLocationSubject();
             this.router.navigate(['/places/tabs/offers']);
           });
       });

@@ -32,7 +32,7 @@ export class MapModalComponent implements OnInit {
       .then(loadingEl => {
         loadingEl.present();
         this.mapService.markerList.subscribe(data => {
-          if (data.length > 0) {
+          if (data && data.length > 0) {
             this.lat = data[0];
             this.lng = data[1];
             this.loadingCtrl.getTop().then(overlay => {
