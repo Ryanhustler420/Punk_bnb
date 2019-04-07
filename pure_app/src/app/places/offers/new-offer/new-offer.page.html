@@ -83,7 +83,7 @@
         </ion-col>
       </ion-row>
       <ion-row *ngIf="isSelectedLocation">
-        <app-map-box height="50" [lat]="lat" [lng]="lng"></app-map-box>
+        <app-map-box [readOnly]="true" height="50" [lat]="lat" [lng]="lng"></app-map-box>
       </ion-row>
     </ion-grid>
   </form>
