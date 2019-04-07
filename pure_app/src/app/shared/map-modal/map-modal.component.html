@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Choose Location</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="onCancel()">Cancel</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="lat">
+    <app-map-box
+      offsetHeight="100"
+      height="100"
+      [lat]="lat"
+      [lng]="lng"
+    ></app-map-box>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-input
+            [color]="addressError ? 'danger' : ''"
+            [(ngModel)]="input"
+            [debounce]="1000"
+            [clearInput]="true"
+            (ionChange)="run()"
+            padding
+            id="input-field"
+            placeholder="Enter Location"
+          ></ion-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-button (click)="onDone()" id="btn">Done</ion-button>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
