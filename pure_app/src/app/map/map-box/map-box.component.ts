@@ -37,7 +37,7 @@ export class MapBoxComponent implements OnInit {
     this.map = new mapboxgl.Map({
       container: 'map',
       style: this.style,
-      zoom: 13,
+      zoom: 15,
       center: [this.lng, this.lat],
     });
     this.addMarker();
@@ -55,7 +55,6 @@ export class MapBoxComponent implements OnInit {
     })
       .setLngLat([this.lng, this.lat])
       .addTo(this.map);
-
     this.marker.on('dragend', () => {
       this.lat = this.marker.getLngLat()['lat'];
       this.lng = this.marker.getLngLat()['lng'];

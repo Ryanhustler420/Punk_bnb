@@ -5,6 +5,8 @@ import {LoadingController} from '@ionic/angular';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {PlacesService} from '../../places.service';
 import {Location} from './../../../shared/location.modal';
+import Map from 'mapbox-gl';
+import {MapService} from './../../../map/map.service';
 
 @Component({
   selector: 'app-new-offer',
@@ -13,11 +15,15 @@ import {Location} from './../../../shared/location.modal';
 })
 export class NewOfferPage implements OnInit {
   form: FormGroup;
+  lat = 0;
+  lng = 0;
+  isSelectedLocation = false;
 
   constructor(
     private placeService: PlacesService,
     private router: Router,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private mapService: MapService
   ) {}
 
   ngOnInit() {
@@ -77,8 +83,8 @@ export class NewOfferPage implements OnInit {
   }
 
   setLocationLatLng(e: Location) {
-    // console.log(e);
+    this.isSelectedLocation = true;
+    (this.lat = e['data'].lat), (this.lng = e['data'].lng);
     this.form.patchValue({location: e});
-    console.log(this.form);
   }
 }

@@ -30,6 +30,10 @@ export class MapService {
       );
   }
 
+  resetLocationSubject() {
+    this.changeMaker.next(null);
+  }
+
   getCurrentLocationLatLong(): Observable<any> {
     return new Observable(observer => {
       if (navigator.geolocation) {
