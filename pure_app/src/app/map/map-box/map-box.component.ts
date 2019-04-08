@@ -41,7 +41,7 @@ export class MapBoxComponent implements OnInit {
       style: this.style,
       zoom: 15,
       center: [this.lng, this.lat],
-      interactive: this.readOnly,
+      interactive: !this.readOnly,
     });
     if (!this.removeAllMarker) {
       this.addMarker();
