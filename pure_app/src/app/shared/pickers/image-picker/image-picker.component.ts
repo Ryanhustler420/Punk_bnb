@@ -1,4 +1,11 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import {Platform} from '@ionic/angular';
 import {
   Plugins,
@@ -13,8 +20,10 @@ import {
   styleUrls: ['./image-picker.component.scss'],
 })
 export class ImagePickerComponent implements OnInit {
+  @ViewChild('filePicker') filePicker: ElementRef<HTMLInputElement>;
   @Output() imagePick = new EventEmitter<string>();
   selectedImage: string;
+  usePicker = false;
 
   constructor(private platform: Platform) {}
 
@@ -24,10 +33,17 @@ export class ImagePickerComponent implements OnInit {
     console.log('iOS:', this.platform.is('ios'));
     console.log('Android:', this.platform.is('android'));
     console.log('Desktop:', this.platform.is('desktop'));
+    if (
+      (this.platform.is('mobile') && !this.platform.is('hybrid')) ||
+      this.platform.is('desktop')
+    ) {
+      this.usePicker = true;
+    }
   }
 
   onPickImage() {
-    if (!Capacitor.isPluginAvailable('Camera')) {
+    if (!Capacitor.isPluginAvailable('Camera') || this.usePicker) {
+      this.filePicker.nativeElement.click();
       return;
     }
 
@@ -47,5 +63,9 @@ export class ImagePickerComponent implements OnInit {
         console.log(err);
         return false;
       });
+  }
+
+  onFileChosen(event: Event) {
+    console.log(event);
   }
 }
