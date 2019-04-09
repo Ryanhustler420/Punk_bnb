@@ -131,3 +131,7 @@ Clone (native app for mobile) of airbnb app build with ionic with angular js fra
 
 - android
   - Android.manifest.xml
+
+## PWD Element for web Camera
+
+> npm install --save @ionic/pwa-elements

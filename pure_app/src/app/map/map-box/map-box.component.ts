@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, EventEmitter, OnDestroy} from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import {MapService} from '../map.service';
 
@@ -7,7 +7,7 @@ import {MapService} from '../map.service';
   templateUrl: './map-box.component.html',
   styleUrls: ['./map-box.component.scss'],
 })
-export class MapBoxComponent implements OnInit {
+export class MapBoxComponent implements OnInit, OnDestroy {
   // default settings
   map: mapboxgl.Map;
   style = 'mapbox://styles/mapbox/streets-v10?optimize=true';
@@ -34,6 +34,10 @@ export class MapBoxComponent implements OnInit {
       }
     });
     this.buildMap();
+  }
+
+  ngOnDestroy() {
+    this.map.remove();
   }
 
   buildMap() {
