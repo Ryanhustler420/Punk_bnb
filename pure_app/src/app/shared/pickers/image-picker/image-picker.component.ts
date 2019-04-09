@@ -24,6 +24,7 @@ export class ImagePickerComponent implements OnInit {
   @Output() imagePick = new EventEmitter<string | File>();
   selectedImage: string;
   usePicker = false;
+  isLoading = false;
 
   constructor(private platform: Platform) {}
 
@@ -46,7 +47,7 @@ export class ImagePickerComponent implements OnInit {
       this.filePicker.nativeElement.click();
       return;
     }
-
+    this.isLoading = true;
     Plugins.Camera.getPhoto({
       quality: 50,
       source: CameraSource.Prompt,
@@ -57,10 +58,12 @@ export class ImagePickerComponent implements OnInit {
     })
       .then(image => {
         this.selectedImage = image.base64Data;
+        this.isLoading = false;
         this.imagePick.emit(image.base64Data);
       })
       .catch(err => {
-        console.log(err);
+        // console.log(err);
+        this.isLoading = false;
         return false;
       });
   }
@@ -70,12 +73,14 @@ export class ImagePickerComponent implements OnInit {
     if (!pickedFile) {
       return;
     }
+    this.isLoading = true;
     const fr = new FileReader();
 
     fr.readAsDataURL(pickedFile);
 
     fr.onload = () => {
       const dataUrl = fr.result.toString();
+      this.isLoading = false;
       this.selectedImage = dataUrl;
       this.imagePick.emit(pickedFile);
     };

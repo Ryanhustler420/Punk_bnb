@@ -1,4 +1,5 @@
 <div text-center>
+  <ion-spinner color="primary" *ngIf="isLoading && !selectedImage"></ion-spinner>
   <ion-img
     role="button"
     (click)="onPickImage()"

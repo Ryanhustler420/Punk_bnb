@@ -22,7 +22,7 @@ function base64toBlob(base64Data, contentType): Blob {
 
     const bytes = new Array(end - begin);
     for (let offset = begin, i = 0; offset < end; ++i, ++offset) {
-      bytes[i] = byteCharacters.charCodeAt(0);
+      bytes[i] = byteCharacters[offset].charCodeAt(0);
     }
 
     byteArrays[sliceIndex] = new Uint8Array(bytes);
