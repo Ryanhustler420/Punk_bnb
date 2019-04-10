@@ -78,6 +78,7 @@ export class NewOfferPage implements OnInit {
   }
 
   onImagePicked(e: string | File) {
+    const error = false;
     let imageFile;
     if (typeof e === 'string') {
       try {
@@ -86,8 +87,19 @@ export class NewOfferPage implements OnInit {
           'image/jpeg'
         );
       } catch (error) {
-        console.log(error);
-        return;
+        error = true;
+      }
+
+      // if jpeg is not supported than trt below code
+      if (!error) {
+        try {
+          imageFile = base64toBlob(
+            e.replace('data:image/png;base64,', ''),
+            'image/jpeg'
+          );
+        } catch (error) {
+          return false;
+        }
       }
     } else {
       imageFile = ImageData;
@@ -101,11 +113,9 @@ export class NewOfferPage implements OnInit {
   }
 
   onCreateOffer() {
-    if (!this.form.valid || this.form.get('image').value) {
+    if (!this.form.valid || !this.form.get('image').value) {
       return;
     }
-
-    console.log(this.form.value);
 
     this.loadingCtrl
       .create({
