@@ -7,6 +7,7 @@ import {PlacesService} from '../../places.service';
 import {Location} from './../../../shared/location.modal';
 // import Map from 'mapbox-gl';
 import {MapService} from './../../../map/map.service';
+import {switchMap} from 'rxjs/operators';
 
 function base64toBlob(base64Data, contentType): Blob {
   contentType = contentType || '';
@@ -124,13 +125,19 @@ export class NewOfferPage implements OnInit {
       .then(loadingEl => {
         loadingEl.present();
         this.placeService
-          .addPlace(
-            this.form.value.title,
-            this.form.value.description,
-            +this.form.value.price,
-            new Date(this.form.value.dateFrom),
-            new Date(this.form.value.dateTo),
-            this.form.value.location
+          .uploadImage(this.form.get('image').value)
+          .pipe(
+            switchMap(uploadRes => {
+              return this.placeService.addPlace(
+                this.form.value.title,
+                this.form.value.description,
+                +this.form.value.price,
+                new Date(this.form.value.dateFrom),
+                new Date(this.form.value.dateTo),
+                this.form.value.location,
+                uploadRes.imageUrl
+              );
+            })
           )
           .subscribe(() => {
             loadingEl.dismiss();

@@ -22,38 +22,7 @@ interface PlaceData {
   providedIn: 'root',
 })
 export class PlacesService {
-  private _places = new BehaviorSubject<Place[]>([
-    // new Place(
-    //   'p1',
-    //   'Manhattan Mansion',
-    //   'In the heart of New York City.',
-    //   'https://lonelyplanetimages.imgix.net/mastheads/GettyImages-538096543_medium.jpg?sharp=10&vib=20&w=1200',
-    //   149.99,
-    //   new Date('2019-01-01'),
-    //   new Date('2019-12-31'),
-    //   'abc'
-    // ),
-    // new Place(
-    //   'p2',
-    //   "L'Amour Toujours",
-    //   'A romantic place in Paris!',
-    //   'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Paris_Night.jpg/1024px-Paris_Night.jpg',
-    //   189.99,
-    //   new Date('2019-01-01'),
-    //   new Date('2019-12-31'),
-    //   'abc'
-    // ),
-    // new Place(
-    //   'p3',
-    //   'The Foggy Palace',
-    //   'Not your average city trip!',
-    //   'https://upload.wikimedia.org/wikipedia/commons/0/01/San_Francisco_with_two_bridges_and_the_fog.jpg',
-    //   99.99,
-    //   new Date('2019-01-01'),
-    //   new Date('2019-12-31'),
-    //   'abc'
-    // ),
-  ]);
+  private _places = new BehaviorSubject<Place[]>([]);
 
   constructor(private authService: AuthService, private http: HttpClient) {}
 
@@ -115,20 +84,16 @@ export class PlacesService {
           );
         })
       );
+  }
 
-    // availableFrom: "2019-04-01T22:25:56.756Z"
-    // availableTo: "2019-12-14T22:25:56.757Z"
-    // description: "New Delhi Best Street Food Market Till Now!"
-    // imageUrl: "https://lonelyplanetimages.imgix.net/mastheads/GettyImages-538096543_medium.jpg?sharp=10&vib=20&w=1200"
-    // price: 123.99
-    // title: "Chandni Chock"
-    // userId: "abc"
-    // this.allPlaces.pipe(
-    //   take(1),
-    //   map(places => {
-    //     return {...places.find(p => p.id === id)};
-    //   })
-    // );
+  uploadImage(image: File) {
+    const uploadData = new FormData();
+    uploadData.append('image', image);
+
+    return this.http.post<{imageUrl: string; imagePath: string}>(
+      'https://us-central1-ionicpunkbnb.cloudfunctions.net/storeImage',
+      uploadData
+    );
   }
 
   addPlace(
@@ -137,14 +102,15 @@ export class PlacesService {
     price: number,
     dateFom: Date,
     dateTo: Date,
-    location: Location
+    location: Location,
+    imageUrl: string
   ) {
     let generatedId: string;
     const newPlace = new Place(
       Math.random().toString(),
       title,
       description,
-      'https://lonelyplanetimages.imgix.net/mastheads/GettyImages-538096543_medium.jpg?sharp=10&vib=20&w=1200',
+      imageUrl,
       price,
       dateFom,
       dateTo,
@@ -170,13 +136,6 @@ export class PlacesService {
           this._places.next(places.concat(newPlace));
         })
       );
-    // return this.allPlaces.pipe(
-    //   take(1),
-    //   delay(1000),
-    //   tap(places => {
-    //     this._places.next(places.concat(newPlace));
-    //   })
-    // );
   }
 
   editPlace(id: string, title: string, description: string) {
