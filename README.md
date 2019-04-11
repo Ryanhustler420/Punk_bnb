@@ -65,6 +65,10 @@ Clone (native app for mobile) of airbnb app build with ionic with angular js fra
 
 > ionic capacitor run android -l [all in one which run all above cmd line by line in the Live Mode]
 
+> ionic capacitor run ios [all in one which run all above cmd line by line]
+
+> ionic capacitor run ios -l [all in one which run all above cmd line by line in the Live Mode]
+
 ## App Require Pages
 
 > ionic generate page auth
@@ -103,6 +107,8 @@ Clone (native app for mobile) of airbnb app build with ionic with angular js fra
 
 > ionic generate component shared/map-modal
 
+> ionic generate component shared/pickers/image-picker
+
 ## Firebase Setup
 
 > Create an app
@@ -118,3 +124,42 @@ Clone (native app for mobile) of airbnb app build with ionic with angular js fra
 > mapbox.com
 
 > [check steps](https://angularfirebase.com/lessons/build-realtime-maps-in-angular-with-mapbox-gl/)
+
+## Keep In Mind
+
+> Check for App Permission withen respective native app folder/directory [check capacitor docs]
+
+- android
+  - Android.manifest.xml
+
+## PWD Element for web Camera
+
+> npm install --save @ionic/pwa-elements
+
+## [Image Upload Firebase](https://github.com/firebase/firebase-tools)
+
+> npm install -g firebase-tools
+
+> run `firebase init` root of the project
+
+> choose `function`
+
+> select `project name`
+
+> choose `javaScript`
+
+> Do you want to use ESLint to catch probable bugs and enforce style? (y/N) : N
+
+> Do you want to install dependencies with npm now? : Yes
+
+it will give you a brand new folder with `index.js` file
+
+> check for `project id` in the firebase console and replace project id in index.js file code
+
+> add some addition dependency to package.json of cloud function folder
+
+> now navigate to the function folder and re run `npm install` there.
+
+> now back to root of the project and run `firebase deploy`
+
+> check function tab in firebase console there must be an EndPoint for image upload

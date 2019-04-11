@@ -159,8 +159,8 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
   getAddressText() {
     this.mapService
       .getAddressTextFromLatLng(
-        this.place.location['data'].lat,
-        this.place.location['data'].lng
+        this.place.location.lat,
+        this.place.location.lng
       )
       .subscribe(add => {
         this.address = add.place_name.split(',').join();
