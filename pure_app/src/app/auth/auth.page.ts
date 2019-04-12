@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from './auth.service';
 import {Router} from '@angular/router';
-import {LoadingController} from '@ionic/angular';
+import {LoadingController, AlertController} from '@ionic/angular';
 import {NgForm} from '@angular/forms';
 
 @Component({
@@ -15,23 +15,35 @@ export class AuthPage implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController
   ) {}
 
   ngOnInit() {}
 
-  onLogin() {
+  authenticate(email: string, password: string) {
     this.isLoading = true;
     this.loadingCtrl
       .create({keyboardClose: true, message: 'Logging in...'})
       .then(loadingEl => {
         loadingEl.present();
-        setTimeout(() => {
-          this.isLoading = false;
-          loadingEl.dismiss();
-          this.authService.login();
-          this.router.navigateByUrl('/places/tabs/discover');
-        }, 1500);
+        this.authService.signup(email, password).subscribe(
+          res => {
+            this.isLoading = false;
+            loadingEl.dismiss();
+            this.authService.login();
+            this.router.navigateByUrl('/places/tabs/discover');
+          },
+          errRes => {
+            loadingEl.dismiss();
+            const code = errRes.error.error.message;
+            let message = 'Could not sign you up, please try again.';
+            if (code === 'EMAIL_EXISTS') {
+              message = 'This email address exists already!';
+            }
+            this.showAlert(message);
+          }
+        );
       });
   }
 
@@ -43,18 +55,20 @@ export class AuthPage implements OnInit {
     const email = form.value.email;
     const password = form.value.password;
 
-    if (this.isLogin) {
-      // Send a request to login server
-    } else {
-      // Send a request to signup server
-      console.log('signup');
-      this.authService.signup(email, password).subscribe(res => {
-        console.log(res);
-      });
-    }
+    this.authenticate(email, password);
   }
 
   onSwitchMode() {
     this.isLogin = !this.isLogin;
+  }
+
+  private showAlert(message: string) {
+    this.alertCtrl
+      .create({
+        header: 'Authentication failed',
+        message: message,
+        buttons: ['Okey'],
+      })
+      .then(alrtEl => alrtEl.present());
   }
 }
