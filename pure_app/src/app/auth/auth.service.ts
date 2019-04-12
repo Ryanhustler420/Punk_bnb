@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 
-interface AuthResponsePayloadData {
+export interface AuthResponsePayloadData {
   kind: string;
   idToken: string;
   email: string;
@@ -29,8 +29,16 @@ export class AuthService {
     return this._userIsAuthenticated;
   }
 
-  login() {
-    this._userIsAuthenticated = true;
+  login(email: string, password: string) {
+    return this.http.post<AuthResponsePayloadData>(
+      `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${
+        environment.firebaseAPIKey
+      }`,
+      {
+        email: email,
+        password: password,
+      }
+    );
   }
 
   signup(email: string, password: string) {
