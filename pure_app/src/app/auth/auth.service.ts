@@ -48,24 +48,42 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    return this.http.post<AuthResponsePayloadData>(
-      `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${
-        environment.firebaseAPIKey
-      }`,
-      {
-        email: email,
-        password: password,
-      }
+    return this.http
+      .post<AuthResponsePayloadData>(
+        `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${
+          environment.firebaseAPIKey
+        }`,
+        {
+          email: email,
+          password: password,
+        }
+      )
+      .pipe(tap(this.setUserData.bind(this)));
+  }
+
+  private setUserData(userData: AuthResponsePayloadData) {
+    const expirationTime = new Date(
+      new Date().getTime() + +userData.expiresIn * 1000
+    );
+    this._user.next(
+      new User(
+        userData.localId,
+        userData.email,
+        userData.idToken,
+        expirationTime
+      )
     );
   }
 
   signup(email: string, password: string) {
-    return this.http.post<AuthResponsePayloadData>(
-      `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${
-        environment.firebaseAPIKey
-      }`,
-      {email: email, password: password, returnSecureToken: true}
-    );
+    return this.http
+      .post<AuthResponsePayloadData>(
+        `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${
+          environment.firebaseAPIKey
+        }`,
+        {email: email, password: password, returnSecureToken: true}
+      )
+      .pipe(tap(this.setUserData.bind(this)));
   }
 
   logout() {
