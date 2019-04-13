@@ -39,39 +39,44 @@ export class BookingService {
     dateFrom: Date,
     dateTo: Date
   ) {
-    const newBooking = new Booking(
-      Math.random().toString(),
-      placeId,
-      this.authService.userId,
-      placeTitle,
-      guestNumber,
-      placeImage,
-      firstName,
-      lastName,
-      dateFrom,
-      dateTo
-    );
     let bookingId: string;
-    return this.http
-      .post<{name: string}>(
-        'https://ionicpunkbnb.firebaseio.com/bookings.json',
-        {
-          ...newBooking,
-          id: null,
+    let newBooking: Booking;
+    this.authService.userId.pipe(
+      take(1),
+      switchMap(userId => {
+        if (!userId) {
+          throw new Error('No user id found!');
         }
-      )
-      .pipe(
-        switchMap(resData => {
-          console.log(resData);
-          bookingId = resData.name;
-          return this.bookings;
-        }),
-        take(1),
-        tap(bookings => {
-          newBooking.id = bookingId;
-          this._bookings.next(bookings.concat(newBooking));
-        })
-      );
+        newBooking = new Booking(
+          Math.random().toString(),
+          placeId,
+          userId,
+          placeTitle,
+          guestNumber,
+          placeImage,
+          firstName,
+          lastName,
+          dateFrom,
+          dateTo
+        );
+        return this.http.post<{name: string}>(
+          'https://ionicpunkbnb.firebaseio.com/bookings.json',
+          {
+            ...newBooking,
+            id: null,
+          }
+        );
+      }),
+      switchMap(resData => {
+        bookingId = resData.name;
+        return this.bookings;
+      }),
+      take(1),
+      tap(bookings => {
+        newBooking.id = bookingId;
+        this._bookings.next(bookings.concat(newBooking));
+      })
+    );
   }
 
   cancelBooking(bookingId: string) {
