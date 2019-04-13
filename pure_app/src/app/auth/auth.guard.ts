@@ -14,10 +14,12 @@ export class AuthGuard implements CanLoad {
     route: import('@angular/router').Route,
     segments: import('@angular/router').UrlSegment[]
   ): boolean | Observable<boolean> | Promise<boolean> {
-    if (!this.authService.isAuthenticated) {
-      this.router.navigate(['/auth']);
-      return;
-    }
-    return this.authService.isAuthenticated;
+    let user: string;
+    this.authService.userId.subscribe(userId => {
+      user = userId;
+    });
+    if (user) { return true; }
+    this.router.navigate(['/auth']);
+    return false;
   }
 }
