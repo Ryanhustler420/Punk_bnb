@@ -54,14 +54,16 @@ export class DiscoverPage implements OnInit, OnDestroy {
   // }
 
   onFilterUpdate(e: CustomEvent<SegmentChangeEventDetail>) {
-    if (e.detail.value === 'all') {
-      this.relevantPlaces = this.loadedPlaces;
-    } else {
-      this.relevantPlaces = this.loadedPlaces.filter(
-        place => place.userId !== this.authService.userId
-      );
-    }
-    this.listedLoadedPlaces = this.relevantPlaces.slice(1);
+    this.authService.userId.subscribe(userId => {
+      if (e.detail.value === 'all') {
+        this.relevantPlaces = this.loadedPlaces;
+      } else {
+        this.relevantPlaces = this.loadedPlaces.filter(
+          place => place.userId !== userId
+        );
+      }
+      this.listedLoadedPlaces = this.relevantPlaces.slice(1);
+    });
   }
 
   // onOpenMenu() {
