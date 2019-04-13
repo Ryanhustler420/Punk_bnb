@@ -4,6 +4,7 @@ import {environment} from '../../environments/environment';
 import {BehaviorSubject} from 'rxjs';
 import {User} from './user.model';
 import {tap, map} from 'rxjs/operators';
+import {Plugins} from '@capacitor/core';
 
 export interface AuthResponsePayloadData {
   kind: string;
@@ -73,6 +74,11 @@ export class AuthService {
         expirationTime
       )
     );
+    this.storeAuthData(
+      userData.localId,
+      userData.idToken,
+      expirationTime.toISOString()
+    );
   }
 
   signup(email: string, password: string) {
@@ -88,5 +94,14 @@ export class AuthService {
 
   logout() {
     this._user.next(null);
+  }
+
+  private storeAuthData(
+    userId: string,
+    token: string,
+    tokenExpirationDate: string
+  ) {
+    const data = JSON.stringify({userId, token, tokenExpirationDate});
+    Plugins.Storage.set({key: 'authData', value: data});
   }
 }
