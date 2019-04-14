@@ -54,7 +54,9 @@ export class DiscoverPage implements OnInit, OnDestroy {
           place => place.userId !== userId
         );
       }
-      this.listedLoadedPlaces = this.relevantPlaces.slice(1);
+      this.listedLoadedPlaces = this.relevantPlaces
+        ? this.relevantPlaces.slice(1)
+        : [];
     });
   }
 }
