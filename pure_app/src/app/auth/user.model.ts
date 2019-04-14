@@ -12,4 +12,13 @@ export class User {
     }
     return this._token;
   }
+
+  get tokenDuration() {
+    if (!this.token) {
+      return 0;
+    }
+    // console.log(this.tokenExpirationDate.getTime() - new Date().getTime());
+    return this.tokenExpirationDate.getTime() - new Date().getTime();
+    // return 3000;
+  }
 }
