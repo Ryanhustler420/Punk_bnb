@@ -27,37 +27,38 @@ export class PlacesService {
   constructor(private authService: AuthService, private http: HttpClient) {}
 
   fetchPlaces() {
-    return this.http
-      .get<{[key: string]: PlaceData}>(
-        'https://ionicpunkbnb.firebaseio.com/offered-places.json'
-      )
-      .pipe(
-        map(resData => {
-          const places = [];
-          for (const key in resData) {
-            if (resData.hasOwnProperty(key)) {
-              places.push(
-                new Place(
-                  key,
-                  resData[key].title,
-                  resData[key].description,
-                  resData[key].imageUrl,
-                  resData[key].price,
-                  new Date(resData[key].availableFrom),
-                  new Date(resData[key].availableTo),
-                  resData[key].userId,
-                  resData[key].location
-                )
-              );
-            }
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(token => {
+        return this.http.get<{[key: string]: PlaceData}>(
+          `https://ionicpunkbnb.firebaseio.com/offered-places.json?auth=${token}`
+        );
+      }),
+      map(resData => {
+        const places = [];
+        for (const key in resData) {
+          if (resData.hasOwnProperty(key)) {
+            places.push(
+              new Place(
+                key,
+                resData[key].title,
+                resData[key].description,
+                resData[key].imageUrl,
+                resData[key].price,
+                new Date(resData[key].availableFrom),
+                new Date(resData[key].availableTo),
+                resData[key].userId,
+                resData[key].location
+              )
+            );
           }
-          return places;
-          // return [];
-        }),
-        tap(places => {
-          this._places.next(places);
-        })
-      );
+        }
+        return places;
+      }),
+      tap(places => {
+        this._places.next(places);
+      })
+    );
   }
 
   get allPlaces() {
@@ -65,34 +66,42 @@ export class PlacesService {
   }
 
   getPlace(id: string) {
-    return this.http
-      .get<PlaceData>(
-        `https://ionicpunkbnb.firebaseio.com/offered-places/${id}.json`
-      )
-      .pipe(
-        map(placeData => {
-          return new Place(
-            id,
-            placeData.title,
-            placeData.description,
-            placeData.imageUrl,
-            placeData.price,
-            new Date(placeData.availableFrom),
-            new Date(placeData.availableTo),
-            placeData.userId,
-            placeData.location
-          );
-        })
-      );
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(token => {
+        return this.http.get<PlaceData>(
+          `https://ionicpunkbnb.firebaseio.com/offered-places/${id}.json?auth=${token}`
+        );
+      }),
+      map(placeData => {
+        return new Place(
+          id,
+          placeData.title,
+          placeData.description,
+          placeData.imageUrl,
+          placeData.price,
+          new Date(placeData.availableFrom),
+          new Date(placeData.availableTo),
+          placeData.userId,
+          placeData.location
+        );
+      })
+    );
   }
 
   uploadImage(image: File) {
     const uploadData = new FormData();
     uploadData.append('image', image);
 
-    return this.http.post<{imageUrl: string; imagePath: string}>(
-      'https://us-central1-ionicpunkbnb.cloudfunctions.net/storeImage',
-      uploadData
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(token => {
+        return this.http.post<{imageUrl: string; imagePath: string}>(
+          'https://us-central1-ionicpunkbnb.cloudfunctions.net/storeImage',
+          uploadData,
+          {headers: {Authorization: 'Bearer ' + token}}
+        );
+      })
     );
   }
 
@@ -106,11 +115,17 @@ export class PlacesService {
     imageUrl: string
   ) {
     let generatedId: string;
+    let fetchedUserId: string;
     let newPlace: Place;
     return this.authService.userId.pipe(
       take(1),
       switchMap(userId => {
-        if (!userId) {
+        fetchedUserId = userId;
+        return this.authService.token;
+      }),
+      take(1),
+      switchMap(token => {
+        if (!fetchedUserId) {
           throw new Error('No User Found!');
         }
 
@@ -122,11 +137,11 @@ export class PlacesService {
           price,
           dateFom,
           dateTo,
-          userId,
+          fetchedUserId,
           location
         );
         return this.http.post<{name: string}>(
-          'https://ionicpunkbnb.firebaseio.com/offered-places.json',
+          `https://ionicpunkbnb.firebaseio.com/offered-places.json?auth=${token}`,
           {
             ...newPlace,
             id: null,
@@ -147,7 +162,13 @@ export class PlacesService {
 
   editPlace(id: string, title: string, description: string) {
     let updatePlaces: Place[];
-    return this.allPlaces.pipe(
+    let fetchToken;
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(token => {
+        fetchToken = token;
+        return this.allPlaces;
+      }),
       take(1),
       switchMap(places => {
         if (!places || places.length <= 0) {
@@ -172,7 +193,7 @@ export class PlacesService {
           oldPlace.location
         );
         return this.http.put(
-          `https://ionicpunkbnb.firebaseio.com/offered-places/${id}.json`,
+          `https://ionicpunkbnb.firebaseio.com/offered-places/${id}.json?auth=${fetchToken}`,
           {
             ...updatePlaces[updatedPlaceIndex],
             id: null,
