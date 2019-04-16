@@ -41,7 +41,12 @@ export class BookingService {
   ) {
     let bookingId: string;
     let newBooking: Booking;
-    return this.authService.userId.pipe(
+    let fetchedToken;
+    return this.authService.token.pipe(
+      switchMap(token => {
+        fetchedToken = token;
+        return this.authService.userId;
+      }),
       take(1),
       switchMap(userId => {
         if (!userId) {
@@ -80,26 +85,34 @@ export class BookingService {
   }
 
   cancelBooking(bookingId: string) {
-    return this.http
-      .delete(`https://ionicpunkbnb.firebaseio.com/bookings/${bookingId}.json`)
-      .pipe(
-        switchMap(() => this.bookings),
-        take(1),
-        tap(bookings => {
-          this._bookings.next(bookings.filter(b => b.id !== bookingId));
-        })
-      );
+    return this.authService.token.pipe(
+      switchMap(token => {
+        return this.http.delete(
+          `https://ionicpunkbnb.firebaseio.com/bookings/${bookingId}.json?auth=${token}`
+        );
+      }),
+      switchMap(() => this.bookings),
+      take(1),
+      tap(bookings => {
+        this._bookings.next(bookings.filter(b => b.id !== bookingId));
+      })
+    );
   }
 
   fetchBookings() {
-    return this.authService.userId.pipe(
+    let fetchedToken;
+    return this.authService.token.pipe(
+      switchMap(token => {
+        fetchedToken = token;
+        return this.authService.userId;
+      }),
       take(1),
       switchMap(userId => {
         if (!userId) {
           throw new Error('User not Found!');
         }
         return this.http.get<{[key: string]: BookingData}>(
-          `https://ionicpunkbnb.firebaseio.com/bookings.json?orderBy="userId"&equalTo="${userId}"`
+          `https://ionicpunkbnb.firebaseio.com/bookings.json?auth=${fetchedToken}&orderBy="userId"&equalTo="${userId}"`
         );
       }),
       map(bookingData => {
