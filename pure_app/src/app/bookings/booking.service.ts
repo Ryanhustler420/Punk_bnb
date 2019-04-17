@@ -65,7 +65,7 @@ export class BookingService {
           dateTo
         );
         return this.http.post<{name: string}>(
-          'https://ionicpunkbnb.firebaseio.com/bookings.json',
+          `https://ionicpunkbnb.firebaseio.com/bookings.json?auth=${fetchedToken}`,
           {
             ...newBooking,
             id: null,
@@ -86,6 +86,7 @@ export class BookingService {
 
   cancelBooking(bookingId: string) {
     return this.authService.token.pipe(
+      take(1),
       switchMap(token => {
         return this.http.delete(
           `https://ionicpunkbnb.firebaseio.com/bookings/${bookingId}.json?auth=${token}`
@@ -102,6 +103,7 @@ export class BookingService {
   fetchBookings() {
     let fetchedToken;
     return this.authService.token.pipe(
+      take(1),
       switchMap(token => {
         fetchedToken = token;
         return this.authService.userId;
