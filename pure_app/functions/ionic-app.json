@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "ionicpunkbnb",
+  "private_key_id": "a75dfa7a7e970c6a0c689ee46055509108add4df",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC183dnN7/X2INq\nt0APe2LsfD5Mq+02d4BfK3hShaBUQSgF4yzf4gmLo7S5svaXCqgWjFbGCZmcEpED\nPaa4+tLy5JWXbLr9ybnkmRhqGLDWVy6KuNvd2zQfVNbg5yL+zvfTJrTuMpBXQbth\nnz30zWmliMJtnDIfZHLC6KTXKUX5fzM8inajznONfxWZ9uBrzzPEsX+RkaioGa8C\ndioLBu6byZF7SerIE0qyarVRG59v/9HseTTCefqE3FhPaDnyfrHnSUj0F1RrzL4h\nMCK9gam4aUtkPy/YTKpz4ziKuW3HzBYmC26tCRLXWV3WTtCGFRetONCJgQHLcW2u\nlkrTCilTAgMBAAECggEADLOdT0BODSRZMDbwquQDKN0XgES0P4wiEwK22JPpeFhA\nEgEk3dAquGvKLvh2TF77Eu/jEtoSthl5tA82t00TMs+QPcziVNsjNfkWAjoNBjl5\nz0dOWfN2dQV4JqUcBUuvczcNhF9VQjIdgZgbPB6m1F5yrDIuMZDSjhatgzOnZd5E\nCOJpYxWbV+w3eqddr5oaXNuP2FKrPcrR4BTQI7zyQTlVEAXJIPRJvV+Pag6WkssN\nDMitYymXWBJYXutTVGBTw68hqqPF68XsyDDEUbfGp6e8j5Rh3nVFtnRYqPGBsGj6\np0mpSAlyObjKa3fFpimilju+7Sby1ArFvgw4MbzuwQKBgQDv/9OS9DiWozhh5C16\n6iQHTgk0RwHzIU7m4b9ASmRU4/GLiglLhqfi2/OO0TfvyKR/10EIshOZNEb3heEZ\nggExX0rjblPkhocCBja0SkEa3kQCXWrsY2QNnTg3kCbPTp8P7EeSdYKdXyp/eVlh\nuuSetfzSTYG3irp4dofk8rKGcwKBgQDCFOeOYXiEliR9fub6dsTcDniUfQ+mR9Z+\nxk58fra+wG2iYFWKkPdQPj9ftVPX3W53ajt2xlCkCJXNDD6mP2E8fN1ANmSPT/1a\nLOfVKKg5YfxQK+AZ49yvNR5va5hY3k602aunvy2ykHealelW9cGUyIxWXwhpeheb\nQFcEAtw5oQKBgQCqzSWU0ywmwLiSqmJXtKS5cicIxnQzxQOzOvvyVD89TxALX8yn\nrIh04lZe0LT/eIrh1J6bAqkCAntzExuVHLmempPgchdQbxFMNoHeI25cIczC5hr/\naui866QjnvqP1QNMwLpbGDhBqYXEPOeIrwqfjSMFxFVJ+3gj3S9vl+3H0wKBgGAl\n4Q0NRppQk2VEgAMm4aGu3ZeaWS1kO2P0tB9C2x+mzul5Vgdeh9bN77FncFDplvc7\nvpe56WtKAYRig4ryrSY9KZLNH4ZL91Q8GOHl0WkUHN5OzielVcfKxfgm0oN8Jnu7\ntilVMbtbjJUdnUqCV1NxAu0rCUzPunAkMLeA/z7hAoGAKN+iBykpm/fldEcRuZFQ\n52cpu9DJNBKHAQV5tN9PaIP0ogQGM9ppBXhASPn9oSXjfCYFGeJM6f0Vr2/ARg1t\nG+M3moucntos9V4Lr8xz55bi7vOZU0k/jjX4N2hvHuy8xMy/e/B7fmF2AY1f7QpH\n7qBSDyonU2Sd2O26dFN0xi4=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-2l72n@ionicpunkbnb.iam.gserviceaccount.com",
+  "client_id": "112629640950498213748",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-2l72n%40ionicpunkbnb.iam.gserviceaccount.com"
+}

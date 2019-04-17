@@ -39,86 +39,109 @@ export class BookingService {
     dateFrom: Date,
     dateTo: Date
   ) {
-    const newBooking = new Booking(
-      Math.random().toString(),
-      placeId,
-      this.authService.userId,
-      placeTitle,
-      guestNumber,
-      placeImage,
-      firstName,
-      lastName,
-      dateFrom,
-      dateTo
-    );
     let bookingId: string;
-    return this.http
-      .post<{name: string}>(
-        'https://ionicpunkbnb.firebaseio.com/bookings.json',
-        {
-          ...newBooking,
-          id: null,
+    let newBooking: Booking;
+    let fetchedToken;
+    return this.authService.token.pipe(
+      switchMap(token => {
+        fetchedToken = token;
+        return this.authService.userId;
+      }),
+      take(1),
+      switchMap(userId => {
+        if (!userId) {
+          throw new Error('No user id found!');
         }
-      )
-      .pipe(
-        switchMap(resData => {
-          console.log(resData);
-          bookingId = resData.name;
-          return this.bookings;
-        }),
-        take(1),
-        tap(bookings => {
-          newBooking.id = bookingId;
-          this._bookings.next(bookings.concat(newBooking));
-        })
-      );
+        newBooking = new Booking(
+          Math.random().toString(),
+          placeId,
+          userId,
+          placeTitle,
+          guestNumber,
+          placeImage,
+          firstName,
+          lastName,
+          dateFrom,
+          dateTo
+        );
+        return this.http.post<{name: string}>(
+          `https://ionicpunkbnb.firebaseio.com/bookings.json?auth=${fetchedToken}`,
+          {
+            ...newBooking,
+            id: null,
+          }
+        );
+      }),
+      switchMap(resData => {
+        bookingId = resData.name;
+        return this.bookings;
+      }),
+      take(1),
+      tap(bookings => {
+        newBooking.id = bookingId;
+        this._bookings.next(bookings.concat(newBooking));
+      })
+    );
   }
 
   cancelBooking(bookingId: string) {
-    return this.http
-      .delete(`https://ionicpunkbnb.firebaseio.com/bookings/${bookingId}.json`)
-      .pipe(
-        switchMap(() => this.bookings),
-        take(1),
-        tap(bookings => {
-          this._bookings.next(bookings.filter(b => b.id !== bookingId));
-        })
-      );
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(token => {
+        return this.http.delete(
+          `https://ionicpunkbnb.firebaseio.com/bookings/${bookingId}.json?auth=${token}`
+        );
+      }),
+      switchMap(() => this.bookings),
+      take(1),
+      tap(bookings => {
+        this._bookings.next(bookings.filter(b => b.id !== bookingId));
+      })
+    );
   }
 
   fetchBookings() {
-    return this.http
-      .get<{[key: string]: BookingData}>(
-        `https://ionicpunkbnb.firebaseio.com/bookings.json?orderBy="userId"&equalTo="${
-          this.authService.userId
-        }"`
-      )
-      .pipe(
-        map(bookingData => {
-          const bookings = [];
-          for (const key in bookingData) {
-            if (bookingData.hasOwnProperty(key)) {
-              bookings.push(
-                new Booking(
-                  key,
-                  bookingData[key].placeId,
-                  bookingData[key].userId,
-                  bookingData[key].placeTitle,
-                  bookingData[key].guestNumber,
-                  bookingData[key].placeImage,
-                  bookingData[key].firstName,
-                  bookingData[key].lastName,
-                  new Date(bookingData[key].bookedFrom),
-                  new Date(bookingData[key].bookingTo)
-                )
-              );
-            }
+    let fetchedToken;
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(token => {
+        fetchedToken = token;
+        return this.authService.userId;
+      }),
+      take(1),
+      switchMap(userId => {
+        if (!userId) {
+          throw new Error('User not Found!');
+        }
+        return this.http.get<{[key: string]: BookingData}>(
+          `https://ionicpunkbnb.firebaseio.com/bookings.json?auth=${fetchedToken}&orderBy="userId"&equalTo="${userId}"`
+        );
+      }),
+      map(bookingData => {
+        const bookings = [];
+        for (const key in bookingData) {
+          if (bookingData.hasOwnProperty(key)) {
+            bookings.push(
+              new Booking(
+                key,
+                bookingData[key].placeId,
+                bookingData[key].userId,
+                bookingData[key].placeTitle,
+                bookingData[key].guestNumber,
+                bookingData[key].placeImage,
+                bookingData[key].firstName,
+                bookingData[key].lastName,
+                new Date(bookingData[key].bookedFrom),
+                new Date(bookingData[key].bookingTo)
+              )
+            );
           }
-          return bookings;
-        }),
-        tap(bookings => {
-          this._bookings.next(bookings);
-        })
-      );
+        }
+        return bookings;
+      }),
+      tap(bookings => {
+        this._bookings.next(bookings);
+      })
+    );
   }
 }

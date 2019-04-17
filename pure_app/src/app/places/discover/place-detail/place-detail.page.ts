@@ -14,6 +14,7 @@ import {Subscription} from 'rxjs';
 import {BookingService} from './../../../bookings/booking.service';
 import {AuthService} from './../../../auth/auth.service';
 import {MapService} from './../../../map/map.service';
+import {take, switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-place-detail',
@@ -48,13 +49,23 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
         return;
       }
       this.isLoading = true;
-      this.placeSub = this.placesService
-        .getPlace(paramMap.get('placeId'))
+      let fetchedUserId: string;
+      return this.authService.userId
+        .pipe(
+          take(1),
+          switchMap(userId => {
+            if (!userId) {
+              throw new Error('Found no user!');
+            }
+            fetchedUserId = userId;
+            return this.placesService.getPlace(paramMap.get('placeId'));
+          })
+        )
         .subscribe(
           place => {
             this.place = place;
             this.getAddressText();
-            this.isBookable = place.userId !== this.authService.userId;
+            this.isBookable = place.userId !== fetchedUserId;
             this.isLoading = false;
           },
           err => {

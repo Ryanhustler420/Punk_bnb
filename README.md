@@ -163,3 +163,37 @@ it will give you a brand new folder with `index.js` file
 > now back to root of the project and run `firebase deploy`
 
 > check function tab in firebase console there must be an EndPoint for image upload
+
+## Authentication Firebase
+
+> Enable Authentication on Firebase Control Panel
+
+> [Restful Api](https://firebase.google.com/docs/reference/rest/auth/)
+
+> Database rules
+
+```json
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null",
+    "bookings": {
+      ".indexOn": ["userId"]
+    }
+  }
+}
+```
+
+> Storage rules
+
+```javascript
+  service firebase.storage {
+    match /b/{bucket}/o {
+      match /{allPaths=**} {
+        allow read, write: if request.auth != null;
+      }
+    }
+  }
+```
+
+> Run After all changes firebase deploy
