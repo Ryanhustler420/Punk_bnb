@@ -219,3 +219,7 @@ it will give you a brand new folder with `index.js` file
 `You Can Change App Version inside Build Gradle File`
 
 `ion has info.plist where you can change settings`
+
+##### Splash Screen
+
+> [icon genrator](https://apetools.webprofusion.com/#/)
