@@ -1,0 +1,6 @@
+{
+  "appId": "com.pure.recipe.ionic",
+  "appName": "pure_app",
+  "bundledWebRuntime": false,
+  "webDir": "www"
+}

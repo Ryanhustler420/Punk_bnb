@@ -197,3 +197,25 @@ it will give you a brand new folder with `index.js` file
 ```
 
 > Run After all changes firebase deploy
+
+## Build App
+
+> ng build --prod
+
+> ionic capacitor sync android
+
+> ionic capacitor sync ios
+
+> ionic capacitor open android
+
+> ionic capacitor open ios
+
+`You Can Change App Name In String.xml File`
+
+`Check App Package Name in Andoid Manifest.XML fille`
+
+`Check App Permissions in Android Manifest.XML file`
+
+`You Can Change App Version inside Build Gradle File`
+
+`ion has info.plist where you can change settings`
